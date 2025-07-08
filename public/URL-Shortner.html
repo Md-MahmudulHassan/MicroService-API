@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>URL Shortener</title>
+  <style>
+    /* Reset & base */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #e0ecfa, #dfe4e9);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #2d3436;
+}
+
+.container {
+    background-color: white;
+    padding: 2.5rem 3rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #003ab8;
+}
+
+p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+}
+
+form {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+}
+
+input[type="url"] {
+    padding: 0.7rem;
+    border: 1px solid #dfe6e9;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.button {
+    background-color: #0034b8;
+    color: white;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.button:hover {
+    background-color: #5586ef;
+}
+
+/* Result section */
+.result {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #f1f2f6;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.result h2 {
+    margin-bottom: 0.5rem;
+}
+
+.result p a {
+    color: #0947e3;
+    word-break: break-all;
+}
+
+/* Error message */
+.error {
+    margin-top: 1.5rem;
+    color: #d63031;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .container {
+        padding: 2rem;
+    }
+
+    h1 {
+        font-size: 1.7rem;
+    }
+
+    input[type="url"] {
+        font-size: 0.95rem;
+    }
+
+    .button {
+        font-size: 0.95rem;
+    }
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>URL Shortener Microservice</h1>
+    <p><b>API Endpoints:</b></p>
+    <ul>
+      <li><code>POST /api/shorturl</code> - Create a short URL</li>
+      <li><code>GET /api/shorturl/:short_url</code> - Redirect to the URL</li>
+    </ul>
+    <br>
+    <p>Enter a valid URL to get a shortened version.</p>
+
+    <form id="url-form">
+      <input
+        type="url"
+        id="url-input"
+        placeholder="https://example.com"
+        required
+      />
+      <button type="submit" class="button">Shorten URL</button>
+        <p class="note">Note: Only valid URLs will be accepted.</p>
+    </form>
+
+    <section id="result" class="result hidden">
+      <h2>Shortened URL:</h2>
+      <p>
+        <strong>Original:</strong> <a id="original-url" href="#" target="_blank"></a><br/>
+        <strong>Short URL:</strong> <a id="short-url" href="#" target="_blank"></a>
+      </p>
+    </section>
+
+    <div id="error-message" class="error hidden"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('url-form');
+    const resultSection = document.getElementById('result');
+    const originalUrlElem = document.getElementById('original-url');
+    const shortUrlElem = document.getElementById('short-url');
+    const errorMessage = document.getElementById('error-message');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('url-input').value;
+      errorMessage.classList.add('hidden');
+      resultSection.classList.add('hidden');
+
+      try {
+        const response = await fetch('/url-shortener/api/shorturl', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: input })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+          errorMessage.textContent = data.error;
+          errorMessage.classList.remove('hidden');
+        } else {
+          originalUrlElem.textContent = data.original_url;
+          originalUrlElem.href = data.original_url;
+
+          const shortUrl = `${window.location.origin}/url-shortener/api/shorturl/${data.short_url}`;
+          shortUrlElem.textContent = shortUrl;
+          shortUrlElem.href = shortUrl;
+
+          resultSection.classList.remove('hidden');
+        }
+      } catch (err) {
+        errorMessage.textContent = 'Something went wrong. Please try again.';
+        errorMessage.classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>

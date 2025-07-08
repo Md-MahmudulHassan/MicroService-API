@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>File Metadata Microservice</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+      * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+  }
+
+  body {
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      color: #333;
+  }
+
+  h1 {
+      margin-bottom: 0.5rem;
+      font-size: 2.5rem;
+      color: #222;
+  }
+
+  p {
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+      color: #555;
+  }
+
+  form {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      max-width: 400px;
+  }
+
+  input[type="file"] {
+      font-size: 1rem;
+  }
+
+  button {
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+      background-color: #357ABD;
+  }
+
+  pre#result {
+      margin-top: 2rem;
+      background-color: #2d2d2d;
+      color: #eee;
+      padding: 1rem;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 100%;
+      overflow-x: auto;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+  }
+
+  input[type="file"] {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: border-color 0.3s ease;
+  }
+  </style>
+</head>
+<body>
+  <h1>File Metadata Microservice</h1>
+  <p>Select a file and upload it to get the file metadata.</p>
+  
+  <form id="uploadForm" action="/file-metadata/api/fileanalyse" method="POST" enctype="multipart/form-data">
+    <input type="file" name="upfile" required />
+    <button type="submit">Upload</button>
+  </form>
+
+  <pre id="result"></pre>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+
+      const response = await fetch('/file-metadata/api/fileanalyse', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        result.textContent = JSON.stringify(data, null, 2);
+      } else {
+        result.textContent = 'Error uploading file';
+      }
+    });
+  </script>
+</body>
+</html>

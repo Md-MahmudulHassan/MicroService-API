@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Microservice API</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f2f6fc, #e3eaf3);
+      color: #2d3436;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .container {
+      background: white;
+      padding: 2.5rem 3rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      color: #003ab8;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      color: #555;
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .links a {
+      text-decoration: none;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      background-color: #4a90e2;
+      color: white;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+
+    .links a:hover {
+      background-color: #3082df;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 2rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .links a {
+        font-size: 0.95rem;
+        padding: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Microservice API Suite</h1>
+    <p>Welcome to the Microservice API Suite — a collection of lightweight, modular services developed with Node.js and Express.</p>
+    <p>Open your browser's developer console to view a backend-generated "Hello world" message.</p>
+
+    <div class="links">
+      <a href="/exercise">Exercise Tracker</a>
+      <a href="/file-metadata">File Metadata API</a>
+      <a href="/timestamp">Timestamp Service</a>
+      <a href="/header-parser">Header Parser</a>
+      <a href="/url-shortener">URL Shortener</a>
+    </div>
+  </div>
+</body>
+</html>
